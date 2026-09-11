@@ -1,0 +1,418 @@
+<div id="serene-treatment-funnel"></div>
+
+<style>
+#serene-treatment-funnel{
+  --serene-deep:#446A5B;
+  --serene-green:#598865;
+  --serene-soft-green:#8BA991;
+  --serene-mist:#E5ECE4;
+  --serene-beige:#DACEB8;
+  --serene-ivory:#E3DAC8;
+  --serene-ink:#2F2F2F;
+  --serene-muted:#5A5A5A;
+  --serene-line:rgba(68,106,91,.18);
+  --serene-white:#FFFFFF;
+  --serene-page:#FBFAF7;
+  --serene-danger:#93584F;
+  color:var(--serene-ink);
+  font-family:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  line-height:1.62;
+  background:var(--serene-page);
+}
+#serene-treatment-funnel *{box-sizing:border-box}
+#serene-treatment-funnel button,#serene-treatment-funnel a{font:inherit}
+.stf-wrap{max-width:1160px;margin:0 auto;padding:30px 22px 84px}
+.stf-stage{
+  display:none;margin:0 0 18px;padding:11px 15px;
+  border:1px solid rgba(147,88,79,.25);background:#fbf3f0;color:var(--serene-danger);
+  border-radius:8px;font-size:12px;font-weight:600
+}
+.stf-stage.is-on{display:block}
+
+/* SERENE editorial hero */
+.stf-hero{
+  position:relative;overflow:hidden;
+  background:var(--serene-mist);
+  border:1px solid rgba(68,106,91,.10);
+  border-radius:4px;
+  padding:66px 64px 58px;
+  margin-bottom:22px;
+}
+.stf-hero:after{
+  content:"SERENE";
+  position:absolute;right:40px;bottom:-16px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(72px,11vw,150px);letter-spacing:.02em;
+  color:rgba(68,106,91,.055);line-height:1;pointer-events:none;
+}
+.stf-kicker{
+  position:relative;z-index:1;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:13px;letter-spacing:.18em;color:var(--serene-deep);font-weight:500;
+}
+.stf-hero h2{
+  position:relative;z-index:1;max-width:720px;
+  color:var(--serene-deep);
+  font-size:clamp(31px,5vw,52px);line-height:1.25;letter-spacing:-.045em;
+  margin:14px 0 18px;font-weight:600;
+}
+.stf-hero p{
+  position:relative;z-index:1;max-width:700px;
+  margin:0;color:var(--serene-muted);font-size:15px;line-height:1.85;
+}
+.stf-philosophy{
+  position:relative;z-index:1;
+  display:flex;gap:0;flex-wrap:wrap;margin-top:32px;max-width:760px;
+  border-top:1px solid rgba(68,106,91,.20);
+}
+.stf-philosophy span{
+  display:inline-flex;align-items:center;min-height:48px;
+  padding:0 24px 0 0;margin-right:24px;
+  font-size:12px;color:var(--serene-deep);font-weight:600;
+}
+.stf-philosophy span+span:before{
+  content:"";width:1px;height:14px;background:rgba(68,106,91,.24);margin-right:24px;
+}
+
+/* Concern discovery */
+.stf-discovery{
+  padding:34px 6px 20px;
+}
+.stf-discovery .stf-eyebrow{
+  font-size:11px;letter-spacing:.14em;color:var(--serene-green);font-weight:700;margin-bottom:7px
+}
+.stf-discovery h3{
+  color:var(--serene-deep);font-size:24px;letter-spacing:-.035em;margin:0 0 5px;font-weight:600
+}
+.stf-discovery p{margin:0 0 17px;color:var(--serene-muted);font-size:13px}
+
+.stf-chip-row,.stf-filter-row{
+  display:flex;gap:9px;overflow:auto;padding:3px 0 10px;scrollbar-width:none
+}
+.stf-chip-row::-webkit-scrollbar,.stf-filter-row::-webkit-scrollbar{display:none}
+.stf-chip,.stf-filter{
+  flex:0 0 auto;border:1px solid var(--serene-line);
+  background:rgba(255,255,255,.82);color:var(--serene-deep);
+  border-radius:999px;padding:10px 16px;cursor:pointer;font-size:12px;font-weight:500;
+  transition:.18s ease;
+}
+.stf-chip:hover,.stf-filter:hover{border-color:var(--serene-soft-green);background:var(--serene-mist)}
+.stf-filter.is-active{
+  background:var(--serene-deep);color:#fff;border-color:var(--serene-deep)
+}
+.stf-nav{
+  position:sticky;top:0;z-index:5;
+  background:rgba(251,250,247,.94);backdrop-filter:blur(12px);
+  border-top:1px solid var(--serene-line);border-bottom:1px solid var(--serene-line);
+  padding:11px 0;margin:0 0 30px
+}
+
+/* Headings */
+.stf-section-head{
+  display:flex;align-items:end;justify-content:space-between;gap:18px;
+  margin:42px 0 16px;padding-top:4px
+}
+.stf-section-head h3{
+  color:var(--serene-deep);font-size:25px;margin:0;letter-spacing:-.035em;font-weight:600
+}
+.stf-section-head p{margin:0;color:var(--serene-muted);font-size:11px}
+
+/* Menu cards */
+.stf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.stf-card{
+  border:1px solid var(--serene-line);background:rgba(255,255,255,.92);
+  border-radius:10px;padding:24px 24px 21px;
+  box-shadow:none;
+}
+.stf-card[hidden]{display:none}
+.stf-card-top{display:flex;justify-content:space-between;gap:12px}
+.stf-card h4{
+  color:var(--serene-deep);margin:4px 0 2px;font-size:20px;letter-spacing:-.025em;font-weight:600
+}
+.stf-sub{
+  color:var(--serene-green);font-size:11px;font-weight:650;letter-spacing:.02em
+}
+.stf-tags{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0 17px}
+.stf-tag{
+  background:rgba(229,236,228,.78);border:1px solid rgba(139,169,145,.18);
+  border-radius:999px;padding:5px 9px;font-size:10px;color:var(--serene-deep)
+}
+.stf-option{padding:15px 0;border-top:1px solid rgba(68,106,91,.12)}
+.stf-option:first-of-type{border-top:0}
+.stf-option-title{display:flex;justify-content:space-between;gap:13px;align-items:flex-start}
+.stf-name{font-weight:650;font-size:14px;color:var(--serene-ink)}
+.stf-spec{color:var(--serene-muted);font-size:11px;margin-top:3px;line-height:1.55}
+.stf-prices{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.stf-price{
+  border:1px solid rgba(68,106,91,.14);border-radius:6px;
+  padding:8px 10px;min-width:116px;background:#fff
+}
+.stf-price b{display:block;font-size:14px;margin-top:1px;color:var(--serene-ink);font-weight:650}
+.stf-price small{font-size:9px;color:var(--serene-muted);letter-spacing:.02em}
+.stf-price.first{
+  border-color:rgba(89,136,101,.38);background:rgba(229,236,228,.58)
+}
+.stf-price.first b{color:var(--serene-deep)}
+.stf-price.first small{color:var(--serene-green);font-weight:700}
+.stf-consult{
+  display:inline-flex;align-items:center;justify-content:center;
+  text-decoration:none;border:0;border-bottom:1px solid var(--serene-soft-green);
+  color:var(--serene-deep);padding:6px 1px 4px;
+  font-size:10px;font-weight:650;white-space:nowrap;
+}
+.stf-consult:hover{color:var(--serene-green);border-bottom-color:var(--serene-green)}
+.stf-more{
+  width:100%;border:1px solid rgba(68,106,91,.12);
+  background:rgba(229,236,228,.50);padding:10px 12px;border-radius:6px;
+  color:var(--serene-deep);cursor:pointer;margin-top:9px;font-size:11px;font-weight:650
+}
+
+/* Monthly event: beige editorial, not discount-store red */
+.stf-event-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stf-event-card{
+  position:relative;border:1px solid rgba(68,106,91,.14);
+  background:rgba(227,218,200,.36);border-radius:8px;padding:19px 18px 18px
+}
+.stf-event-card:before{
+  content:"";display:block;width:28px;height:2px;background:var(--serene-green);margin-bottom:13px
+}
+.stf-event-label{
+  font-size:9px;font-weight:700;color:var(--serene-green);letter-spacing:.10em
+}
+.stf-event-card h5{
+  color:var(--serene-deep);margin:6px 0 5px;font-size:15px;line-height:1.45;font-weight:650
+}
+.stf-event-spec{color:var(--serene-muted);font-size:10px;min-height:42px;line-height:1.6}
+.stf-event-price{
+  color:var(--serene-deep);font-size:20px;font-weight:650;margin:12px 0 9px;
+  letter-spacing:-.02em
+}
+
+/* Final consult block */
+.stf-cta{
+  margin-top:48px;border-radius:6px;background:var(--serene-deep);color:#fff;
+  padding:34px 36px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px
+}
+.stf-cta h3{font-size:22px;margin:0 0 7px;font-weight:600;letter-spacing:-.03em}
+.stf-cta p{color:rgba(255,255,255,.78);margin:0;font-size:12px;line-height:1.75}
+.stf-cta a{
+  background:#fff;color:var(--serene-deep);text-decoration:none;border-radius:999px;
+  padding:13px 20px;font-weight:650;font-size:12px
+}
+.stf-notice{
+  margin-top:18px;background:rgba(229,236,228,.55);
+  border:1px solid rgba(68,106,91,.09);border-radius:6px;
+  padding:17px 20px;color:var(--serene-muted);font-size:10px
+}
+.stf-notice ul{margin:0;padding-left:17px}
+.stf-notice li+li{margin-top:6px}
+
+/* Internal preview mark */
+.stf-brand-note{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  margin:18px 0 0;padding:12px 14px;border-top:1px solid var(--serene-line);
+  color:var(--serene-muted);font-size:10px
+}
+.stf-brand-note strong{color:var(--serene-deep);font-weight:650}
+
+@media(max-width:760px){
+  .stf-wrap{padding:18px 14px 60px}
+  .stf-hero{padding:44px 24px 38px;border-radius:3px}
+  .stf-hero:after{right:8px;bottom:-6px;font-size:76px}
+  .stf-hero h2{font-size:32px}
+  .stf-hero p{font-size:13px}
+  .stf-philosophy{display:block;margin-top:24px}
+  .stf-philosophy span{display:flex;padding:8px 0;margin:0;min-height:auto}
+  .stf-philosophy span+span:before{display:none}
+  .stf-discovery{padding:28px 2px 14px}
+  .stf-grid,.stf-event-grid{grid-template-columns:1fr}
+  .stf-card{padding:20px 18px;border-radius:8px}
+  .stf-section-head{display:block;margin-top:34px}
+  .stf-section-head p{margin-top:5px}
+  .stf-cta{grid-template-columns:1fr;padding:27px 22px;border-radius:5px}
+  .stf-cta a{text-align:center}
+  .stf-nav{top:0;margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}
+  .stf-option-title{gap:8px}
+}
+</style>
+
+<script>
+(function(){
+  const ROOT = document.getElementById('serene-treatment-funnel');
+  if(!ROOT) return;
+
+  const DATA = {"config": {"version": "2026-09-11.v1.1-brand", "mode": "staging", "eventLabel": "9월 EVENT", "eventPeriod": "2026.09.01–09.30", "bridgeBase": "https://medihim-bo.vercel.app/bridge", "hospital": "SERN", "oa": "@serene.clinic"}, "menuGroups": [{"code": "LIFT_BASIC", "category": "lifting", "title": "리프팅·탄력", "subtitle": "기본 장비 메뉴", "concerns": ["페이스라인", "처짐", "탄력"], "options": [{"menu_code": "ONDA_60", "name": "ONDA", "spec": "60kJ", "regular": 534000, "first": 440000}, {"menu_code": "ONDA_80", "name": "ONDA", "spec": "80kJ", "regular": 712000}, {"menu_code": "ONDA_100", "name": "ONDA", "spec": "100kJ", "regular": 890000}, {"menu_code": "XERF_300", "name": "XERF", "spec": "300샷", "regular": 1159000, "first": 849000}, {"menu_code": "XERF_600", "name": "XERF", "spec": "600샷", "regular": 1775000}, {"menu_code": "ULTHERA_300", "name": "울쎄라", "spec": "300샷", "regular": 1100000}, {"menu_code": "ULTHERA_400", "name": "울쎄라", "spec": "400샷", "regular": 1330000}, {"menu_code": "ULTHERA_600", "name": "울쎄라", "spec": "600샷", "regular": 1860000}, {"menu_code": "COOLSONIC_2000", "name": "쿨소닉", "spec": "2,000샷", "first": 399000}, {"menu_code": "COOLSONIC_3000", "name": "쿨소닉", "spec": "3,000샷", "regular": 690000}, {"menu_code": "COOLSONIC_5000", "name": "쿨소닉", "spec": "5,000샷", "regular": 990000}, {"menu_code": "COOLSONIC_9000", "name": "쿨소닉", "spec": "9,000샷", "regular": 1580000}, {"menu_code": "OPUS_10", "name": "OPUS", "spec": "10kJ", "regular": 99000}, {"menu_code": "OPUS_60", "name": "OPUS", "spec": "60kJ", "regular": 489000}]}, {"code": "LIFT_PACKAGE", "category": "lifting", "title": "리프팅·탄력", "subtitle": "복합 메뉴", "concerns": ["윤곽", "복합 리프팅", "집중 케어"], "options": [{"menu_code": "ONDA60_OPUS60_FIRST", "name": "ONDA＋OPUS", "spec": "ONDA 60kJ＋OPUS 60kJ", "first": 799000}]}, {"code": "BOOSTER_BASIC", "category": "booster", "title": "스킨부스터", "subtitle": "수분·윤기·피부결", "concerns": ["건조", "윤기", "피부결"], "options": [{"menu_code": "REJURAN_2CC", "name": "리쥬란 힐러", "spec": "2cc", "regular": 270000}, {"menu_code": "LILY_REJURAN_2CC", "name": "릴리쥬란", "spec": "2cc", "regular": 169000, "first": 149000}, {"menu_code": "JUVELOOK_3CC", "name": "쥬베룩 스킨", "spec": "3cc", "first": 169000}, {"menu_code": "JUVELOOK_6CC", "name": "쥬베룩 스킨", "spec": "6cc", "regular": 389000}, {"menu_code": "LILY_LDM_5CC", "name": "릴리LDM 물광주사", "spec": "5cc", "regular": 149000}, {"menu_code": "LILYTOX_5CC", "name": "릴리톡스", "spec": "릴리LDM＋스킨보톡스 5cc", "regular": 299000, "first": 249000}]}, {"code": "BOOSTER_RECOVERY", "category": "booster", "title": "스킨부스터", "subtitle": "피부회복·복합케어", "concerns": ["피부 회복", "건조", "콜라겐"], "options": [{"menu_code": "JUVELOOK_REJURAN_LDM_FIRST", "name": "쥬베룩＋리쥬란＋LDM", "spec": "쥬베룩 3cc＋리쥬란 2cc＋LDM", "first": 299000}]}, {"code": "PORE_SCAR", "category": "pore", "title": "모공·여드름흉터", "subtitle": "모공·요철·피부결", "concerns": ["모공", "여드름흉터", "피부 요철"], "options": [{"menu_code": "POTENZA_PORE", "name": "포텐자", "spec": "모공 N팁", "regular": 182000}, {"menu_code": "POTENZA_SCAR", "name": "포텐자", "spec": "여드름흉터 I팁", "regular": 182000}, {"menu_code": "POTENZA_JUVELOOK_3CC", "name": "포텐자＋쥬베룩", "spec": "펌핑 팁＋쥬베룩 3cc", "regular": 389000}, {"menu_code": "POTENZA_JUVELOOK_LDM_FIRST", "name": "포텐자＋쥬베룩＋LDM", "spec": "펌핑 팁＋쥬베룩 3cc＋LDM", "first": 399000}, {"menu_code": "MIRAJET_JUVELOOK_US", "name": "미라젯＋쥬베룩", "spec": "쥬베룩 3cc＋초음파 케어", "regular": 420000}, {"menu_code": "PICO_FRACTIONAL", "name": "피코프락셔널＋크라이오", "spec": "나비존 · 1회", "regular": 165000}]}, {"code": "PIGMENT_BASIC", "category": "pigment", "title": "기미·칙칙함 · 토닝", "subtitle": "기본 토닝", "concerns": ["기미", "칙칙함", "색소 불균형"], "options": [{"menu_code": "PICO_TONING", "name": "피코마제스티", "spec": "토닝 모드 · 1회", "regular": 152000}, {"menu_code": "PICO_ALLINONE", "name": "피코마제스티 올인원", "spec": "토닝＋스팟 · 1회", "regular": 230000}, {"menu_code": "DUAL_TONING", "name": "듀얼토닝", "spec": "피코마제스티＋클라리티 · 1회", "regular": 299000}, {"menu_code": "TRIPLE_TONING", "name": "트리플토닝", "spec": "피코마제스티＋알렉스 토닝＋클라리티 · 1회", "regular": 379000}]}, {"code": "PIGMENT_EVENT", "category": "pigment", "title": "기미·칙칙함 · 토닝", "subtitle": "9월 복합 EVENT", "concerns": ["가을 색소", "톤", "집중 케어"], "options": []}, {"code": "SKINCARE", "category": "skincare", "title": "피부관리·진정", "subtitle": "보습·진정·컨디션", "concerns": ["진정", "보습", "피부관리"], "options": [{"menu_code": "LDM_12", "name": "LDM", "spec": "12분 · 1회", "regular": 69000}, {"menu_code": "LHALA_PEEL", "name": "라라필", "spec": "1회", "regular": 98000}, {"menu_code": "LHALA_JET_LDM", "name": "라라젯＋LDM", "spec": "LDM 12분 · 1회", "regular": 159000}, {"menu_code": "HYDRATION_SOOTHING", "name": "수분 진정 케어", "spec": "1회", "regular": 55000}]}, {"code": "BOTOX", "category": "botox", "title": "보톡스", "subtitle": "부위·제품별", "concerns": ["표정주름", "사각턱", "침샘", "스킨보톡스"], "options": [{"menu_code": "HITOX_WRINKLE", "name": "국산 HITOX", "spec": "표정주름 1부위", "regular": 38000}, {"menu_code": "CORETOX_WRINKLE", "name": "코어톡스", "spec": "표정주름 1부위", "regular": 59000}, {"menu_code": "XEOMIN_WRINKLE", "name": "제오민", "spec": "표정주름 1부위", "regular": 72000}, {"menu_code": "HITOX_JAW_50", "name": "국산 HITOX", "spec": "사각턱 50U", "regular": 42000}, {"menu_code": "CORETOX_JAW_50", "name": "코어톡스", "spec": "사각턱 50U", "regular": 106000}, {"menu_code": "XEOMIN_JAW_50", "name": "제오민", "spec": "사각턱 50U", "regular": 165000}, {"menu_code": "HITOX_SALIVARY", "name": "국산 HITOX", "spec": "침샘 · 용량은 진료 시 확인", "regular": 75000}, {"menu_code": "CORETOX_SALIVARY", "name": "코어톡스", "spec": "침샘 · 용량은 진료 시 확인", "regular": 124000}, {"menu_code": "XEOMIN_SALIVARY", "name": "제오민", "spec": "침샘 · 용량은 진료 시 확인", "regular": 174000}, {"menu_code": "HITOX_DERMOTOX_3CC", "name": "국산 HITOX", "spec": "스킨보톡스 얼굴전체 3cc", "regular": 199000}, {"menu_code": "CORETOX_DERMOTOX_3CC", "name": "코어톡스", "spec": "스킨보톡스 얼굴전체 3cc", "regular": 280000}, {"menu_code": "XEOMIN_DERMOTOX_3CC", "name": "제오민", "spec": "스킨보톡스 얼굴전체 3cc", "regular": 330000}, {"menu_code": "HITOX_BODY_100", "name": "국산 HITOX", "spec": "종아리 또는 승모근 100U", "regular": 110000}, {"menu_code": "CORETOX_BODY_100", "name": "코어톡스", "spec": "종아리 또는 승모근 100U", "regular": 220000}, {"menu_code": "XEOMIN_BODY_100", "name": "제오민", "spec": "종아리 또는 승모근 100U", "regular": 330000}]}, {"code": "ONEDAY", "category": "oneday", "title": "원데이 복합", "subtitle": "하루에 여러 시술을 함께 상담하고 싶은 분께", "concerns": ["미백", "홍조", "보습", "여드름흉터"], "options": [{"menu_code": "ONEDAY_BRIGHT", "name": "원데이미백", "spec": "라비앙 트리윰＋엘리먼트 4cc＋백옥주사", "regular": 599000}, {"menu_code": "ONEDAY_REDNESS", "name": "원데이홍조", "spec": "피코마제스티홍조토닝＋고우리 2cc＋스킨보톡스 3cc", "regular": 699000}, {"menu_code": "ONEDAY_HYDRATION", "name": "원데이보습", "spec": "LDM＋쥬베룩 스킨 3cc＋히로웨이브 2cc", "regular": 599000}, {"menu_code": "ONEDAY_SCAR", "name": "원데이 여드름흉터", "spec": "피코마제스티 피코프락셔널＋미라젯＋리쥬란 2cc＋LDM", "regular": 799000}]}], "monthlyEvents": [{"event_code": "SEP26_CORETOX_WRINKLE", "category": "botox", "name": "코어톡스 표정주름 1부위", "spec": "1부위 · 용량은 진료 시 확인", "price": 44000}, {"event_code": "SEP26_CORETOX_JAW", "category": "botox", "name": "코어톡스 사각턱", "spec": "용량은 진료 시 확인", "price": 89000}, {"event_code": "SEP26_CORETOX_SALIVARY", "category": "botox", "name": "코어톡스 침샘", "spec": "용량은 진료 시 확인", "price": 99000}, {"event_code": "SEP26_CORETOX_DERMOTOX", "category": "botox", "name": "코어톡스 스킨보톡스", "spec": "얼굴전체 3cc", "price": 260000}, {"event_code": "SEP26_OPUS_10", "category": "lifting", "name": "OPUS 디톡스(유니페이스)", "spec": "10kJ", "price": 79000}, {"event_code": "SEP26_OPUS_30", "category": "lifting", "name": "OPUS 디톡스(유니페이스)", "spec": "30kJ", "price": 199000}, {"event_code": "SEP26_OPUS_60", "category": "lifting", "name": "OPUS 디톡스(유니페이스)", "spec": "60kJ", "price": 349000}, {"event_code": "SEP26_ULTHERA_JAW", "category": "lifting", "name": "울쎄라 페이스라인 집중 리프트", "spec": "울쎄라 200샷＋ONDA 60kJ＋LDM", "price": 990000}, {"event_code": "SEP26_FULLFACE_BALANCE", "category": "lifting", "name": "풀페이스 밸런스 리프트", "spec": "울쎄라 400샷＋XERF 300샷", "price": 1990000}, {"event_code": "SEP26_COOLSONIC_BALANCE", "category": "lifting", "name": "쿨소닉 동안 밸런스", "spec": "쿨소닉 9,000샷＋고우리 2병＋LDM", "price": 2290000}, {"event_code": "SEP26_REJURAN_REPAIR_1", "category": "booster", "name": "수분·윤기 리페어", "spec": "미라젯＋리쥬란 4cc＋LDM재생 · 1회", "price": 589000}, {"event_code": "SEP26_REJURAN_REPAIR_3", "category": "booster", "name": "수분·윤기 리페어", "spec": "미라젯＋리쥬란 4cc＋LDM재생 · 3回", "price": 1419000}, {"event_code": "SEP26_AFTERSUMMER_1", "category": "booster", "name": "애프터서머 콜라겐윤기", "spec": "라라필＋압출 · 진정＋라비앙 트리윰＋X-injector＋쥬베룩 2cc＋리쥬란 2cc＋크라이오 · 1회", "price": 599000}, {"event_code": "SEP26_AFTERSUMMER_3", "category": "booster", "name": "애프터서머 콜라겐윤기", "spec": "동일 구성 · 3回", "price": 1429000}, {"event_code": "SEP26_PREMIUM_REBUILD_1", "category": "booster", "name": "프리미엄 피부 리빌딩", "spec": "미라젯/캐뉼라＋Re2O 1병＋라비앙 트리윰 나비존＋LDM재생 · 1회", "price": 799000}, {"event_code": "SEP26_PREMIUM_REBUILD_3", "category": "booster", "name": "프리미엄 피부 리빌딩", "spec": "동일 구성 · 3回", "price": 1890000}, {"event_code": "SEP26_PIGMENT_VALUE", "category": "pigment", "name": "가을 색소 · 톤 리셋", "spec": "피코마제스티 토닝＋클라리티＋라비앙 트리윰 나비존＋크라이오진정", "price": 299000}, {"event_code": "SEP26_PIGMENT_FOCUS", "category": "pigment", "name": "가을 색소 올케어", "spec": "피코마제스티＋클라리티＋나비존 피코 DOI 프락셔널＋미라젯 리쥬란 2cc＋엘리먼트미백부스터 2cc", "price": 699000}]};
+  const CFG = DATA.config;
+  let active = 'all';
+
+  const fmt = n => new Intl.NumberFormat('ko-KR').format(n) + '원';
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const track = (event, params={}) => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event, funnel_module:'treatment_menu', data_version:CFG.version, ...params});
+  };
+  const carryKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','session','creative_id','adset_id','campaign_id'];
+  function bridgeUrl(meta={}){
+    const u = new URL(CFG.bridgeBase);
+    u.searchParams.set('hospital', CFG.hospital);
+    u.searchParams.set('oa', CFG.oa);
+    u.searchParams.set('source_page', 'jp_treatment_funnel');
+    Object.entries(meta).forEach(([k,v])=>{ if(v) u.searchParams.set(k,v); });
+    const cur = new URLSearchParams(location.search);
+    carryKeys.forEach(k=>{ const v=cur.get(k); if(v) u.searchParams.set(k,v); });
+    return u.toString();
+  }
+  const categoryLabels = {
+    all:'전체',lifting:'리프팅',booster:'스킨부스터',
+    pore:'모공·여드름흉터',pigment:'기미·칙칙함',skincare:'피부관리',
+    botox:'보톡스',oneday:'원데이'
+  };
+  const concernMap = {
+    '페이스라인':'lifting','처짐':'lifting','모공':'pore','여드름흉터':'pore',
+    '건조':'booster','윤기':'booster','기미':'pigment','칙칙함':'pigment',
+    '진정':'skincare','표정주름':'botox'
+  };
+
+  function optionHtml(o){
+    const prices = [
+      o.regular ? `<div class="stf-price"><small>일반가</small><b>${fmt(o.regular)}</b></div>` : '',
+      o.first ? `<div class="stf-price first"><small>첫방문가</small><b>${fmt(o.first)}</b></div>` : ''
+    ].join('');
+    return `<div class="stf-option" data-menu="${esc(o.menu_code)}">
+      <div class="stf-option-title">
+        <div><div class="stf-name">${esc(o.name)}</div><div class="stf-spec">${esc(o.spec)}</div></div>
+        <a class="stf-consult" href="${bridgeUrl({menu_code:o.menu_code,offer_type:o.first?'FIRST_OR_REGULAR':'REGULAR'})}"
+           data-action="line" data-menu="${esc(o.menu_code)}">상담에서 확인</a>
+      </div>
+      <div class="stf-prices">${prices}</div>
+    </div>`;
+  }
+
+  function groupHtml(g){
+    const initial = 4;
+    const visible = g.options.slice(0,initial).map(optionHtml).join('');
+    const rest = g.options.slice(initial).map(optionHtml).join('');
+    return `<article class="stf-card" data-cat="${esc(g.category)}">
+      <div class="stf-card-top"><div><div class="stf-sub">${esc(g.title)}</div><h4>${esc(g.subtitle)}</h4></div></div>
+      <div class="stf-tags">${g.concerns.map(c=>`<span class="stf-tag">${esc(c)}</span>`).join('')}</div>
+      ${visible || `<div class="stf-sub">이번 달 EVENT 메뉴에서 확인해 주세요.</div>`}
+      ${rest ? `<div class="stf-rest" hidden>${rest}</div><button class="stf-more" type="button">전체 메뉴 보기(${g.options.length})</button>` : ''}
+    </article>`;
+  }
+
+  function eventHtml(e){
+    return `<article class="stf-event-card" data-cat="${esc(e.category)}">
+      <div class="stf-event-label">${esc(CFG.eventLabel)} · ${esc(CFG.eventPeriod)}</div>
+      <h5>${esc(e.name)}</h5><div class="stf-event-spec">${esc(e.spec)}</div>
+      <div class="stf-event-price">${fmt(e.price)}</div>
+      <a class="stf-consult" href="${bridgeUrl({event_code:e.event_code,offer_type:'MONTHLY_EVENT'})}"
+         data-action="line" data-event="${esc(e.event_code)}">이 구성 상담하기</a>
+    </article>`;
+  }
+
+  ROOT.innerHTML = `
+  <div class="stf-wrap">
+    <div class="stf-stage ${CFG.mode==='staging'?'is-on':''}">
+      공개 전 검수 모드: 가격 및 적용 조건을 병원에서 승인한 후 CONFIG의 mode를 public으로 변경해 주세요.
+    </div>
+    <section class="stf-hero">
+      <div class="stf-kicker">SERENE · TREATMENT GUIDE</div>
+      <h2>가격보다 먼저,<br>지금의 피부 상태와 고민을 봅니다.</h2>
+      <p>같은 고민이라도 필요한 시술은 다를 수 있습니다. 피부 상태를 확인하고,
+      원하는 변화와 일정·다운타임을 함께 고려해 시술을 정리해 보세요.
+      일반가·첫방문가·이번 달 EVENT도 같은 화면에서 차분하게 확인할 수 있습니다.</p>
+      <div class="stf-philosophy">
+        <span>01&nbsp;&nbsp;피부 상태 확인</span>
+        <span>02&nbsp;&nbsp;필요한 시술 함께 정리</span>
+        <span>03&nbsp;&nbsp;일정과 회복까지 고려</span>
+      </div>
+    </section>
+
+    <section class="stf-discovery">
+      <div class="stf-eyebrow">FIND BY CONCERN</div>
+      <h3>고민부터 찾아보세요.</h3>
+      <p>시술명이 익숙하지 않아도 괜찮습니다. 현재 가장 신경 쓰이는 항목을 선택해 주세요.</p>
+    </section>
+
+    <div class="stf-chip-row" aria-label="고민으로 찾기">
+      ${Object.keys(concernMap).map(k=>`<button class="stf-chip" type="button" data-concern="${esc(k)}">${esc(k)}</button>`).join('')}
+    </div>
+
+    <div class="stf-nav">
+      <div class="stf-filter-row">
+        ${Object.entries(categoryLabels).map(([k,v])=>`<button class="stf-filter ${k==='all'?'is-active':''}" type="button" data-filter="${k}">${v}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="stf-section-head">
+      <div><h3>시술 메뉴</h3><p>같은 규격·용량·샷 수 기준으로만 가격 조건을 비교합니다.</p></div>
+    </div>
+    <section class="stf-grid">${DATA.menuGroups.map(groupHtml).join('')}</section>
+
+    <div class="stf-section-head">
+      <div><h3>${esc(CFG.eventLabel)}</h3><p>${esc(CFG.eventPeriod)} · 기간과 적용 조건을 확인해 주세요.</p></div>
+    </div>
+    <section class="stf-event-grid">${DATA.monthlyEvents.map(eventHtml).join('')}</section>
+
+    <section class="stf-cta">
+      <div><h3>시술을 미리 결정하지 않으셔도 됩니다.</h3>
+      <p>현재 고민과 원하는 변화, 가능한 일정 정도만 알려주세요. 피부 상태를 확인한 뒤 상담하며 함께 정리합니다.</p></div>
+      <a href="${bridgeUrl({offer_type:'GENERAL_CONSULT'})}" data-action="line" data-menu="GENERAL">LINE으로 상담하기</a>
+    </section>
+
+    <aside class="stf-notice">
+      <ul>
+        <li>표시 가격은 비급여 진료 기준이며, 부가세는 별도입니다.</li>
+        <li>내원 상담만 진행하는 경우 상담비 15,000원이 발생하며, 시술을 진행하는 경우 상담비는 발생하지 않습니다.</li>
+        <li>첫방문가와 월간 EVENT는 적용 조건이 다릅니다. 중복 적용 및 적용 시점 등 상세 조건은 예약 전에 확인해 주세요.</li>
+        <li>의사의 진료 후 피부 상태와 희망사항에 따라 시술 내용을 제안드립니다.</li>
+      </ul>
+    </aside>
+    <div class="stf-brand-note">
+      <strong>SERENE BRAND PREVIEW · KR</strong>
+      <span>딥 그린 · 미스트 그린 · 웜 베이지 · 상담 중심 톤 적용</span>
+    </div>
+  </div>`;
+
+  function applyFilter(cat, reason='category'){
+    active = cat;
+    ROOT.querySelectorAll('.stf-filter').forEach(b=>b.classList.toggle('is-active',b.dataset.filter===cat));
+    ROOT.querySelectorAll('.stf-card,.stf-event-card').forEach(el=>{
+      el.hidden = !(cat==='all' || el.dataset.cat===cat);
+    });
+    track(reason==='concern'?'menu_concern_click':'menu_category_click',{category:cat});
+  }
+
+  ROOT.addEventListener('click', e=>{
+    const filter = e.target.closest('[data-filter]');
+    if(filter) applyFilter(filter.dataset.filter);
+
+    const concern = e.target.closest('[data-concern]');
+    if(concern){
+      const cat = concernMap[concern.dataset.concern] || 'all';
+      applyFilter(cat,'concern');
+      ROOT.querySelector('.stf-nav').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    const more = e.target.closest('.stf-more');
+    if(more){
+      const rest = more.previousElementSibling;
+      const open = rest.hasAttribute('hidden');
+      if(open){rest.removeAttribute('hidden');more.textContent='닫기';}
+      else{rest.setAttribute('hidden','');more.textContent='전체 메뉴 보기';}
+      track('menu_expand',{category:more.closest('.stf-card')?.dataset.cat||''});
+    }
+
+    const line = e.target.closest('[data-action="line"]');
+    if(line){
+      track('menu_line_click',{
+        menu_code:line.dataset.menu||'',
+        event_code:line.dataset.event||'',
+        category:line.closest('[data-cat]')?.dataset.cat||'general'
+      });
+    }
+  });
+
+  track('menu_funnel_view',{page_path:location.pathname});
+})();
+</script>
